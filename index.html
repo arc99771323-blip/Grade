@@ -2,147 +2,168 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Busca de Produtos - Versão Premium</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<title>Consulta de Produtos</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
 <style>
-  :root{
-    --glass-bg: rgba(255,255,255,0.1);
-    --glass-strong: rgba(255,255,255,0.2);
-    --text: #fff;
+  :root {
+    --bg-gradient: radial-gradient(circle at top left, #1a253a, #0a0a0d);
+    --glass-bg: rgba(17, 25, 40, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.6);
+    --accent: #00ff88;
+    --alert: #ff4d4d;
+    --info: #38bdf8;
   }
-  * { box-sizing: border-box; }
+
+  * { box-sizing: border-box; outline: none; }
+
   body {
     font-family: 'Inter', sans-serif;
-    margin: 0; padding: 20px;
-    min-height: 100vh; color: var(--text);
-    background: linear-gradient(-45deg, #1e3c72, #2a5298, #0f2027, #203a43, #2c5364);
-    background-size: 400% 400%; animation: gradientBG 15s ease infinite;
-  }
-  @keyframes gradientBG {
-    0% {background-position: 0% 50%;}
-    50% {background-position: 100% 50%;}
-    100% {background-position: 0% 50%;}
-  }
-  @media (prefers-reduced-motion: reduce) {
-    body { animation: none; }
-    .spinner { animation: none; }
-    .card { animation: none; }
+    margin: 0; padding: 15px; /* Reduzi o respiro lateral */
+    min-height: 100vh; color: var(--text-primary);
+    background: var(--bg-gradient);
+    background-attachment: fixed;
   }
 
-  h2 { text-align:center; font-weight:700; font-size:2rem; margin:0 0 10px; letter-spacing:1px; }
-  h3 { text-align:center; font-weight:400; font-size:1rem; margin:0 0 20px; color: rgba(255,255,255,0.8); }
+  /* Cabeçalho mais contido */
+  h2 { text-align: center; font-weight: 700; font-size: 1.6rem; margin: 0 0 4px; letter-spacing: -1px; }
+  h3 { text-align: center; font-weight: 400; font-size: 0.75rem; margin: 0 0 20px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
 
+  /* Filtros - Mais densos */
   .filtros {
-    display:flex; flex-direction:column; gap:10px;
-    background: var(--glass-bg); backdrop-filter: blur(10px);
-    padding:20px; border-radius:15px; box-shadow: 0 4px 30px rgba(0,0,0,0.1);
-    margin-bottom: 16px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 15px 20px; /* Reduzi o padding de 30px para 15px */
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
+    margin-bottom: 20px;
   }
-  .linha { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
-  label { position:absolute; left:-9999px; }
 
+  .linha { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 8px; }
+  .linha:last-child { margin-bottom: 0; }
+
+  /* Inputs e Selects Menores */
   input, select {
-    padding:10px 15px; border:none; border-radius:10px; outline:none;
-    background: var(--glass-strong); color: var(--text); font-size:0.95rem;
-    transition: all .3s ease; min-width: 180px;
+    padding: 8px 12px; border: 1px solid var(--glass-border); border-radius: 10px;
+    background: rgba(0, 0, 0, 0.3); color: var(--text-primary); font-size: 0.85rem;
+    transition: all .3s ease; min-width: 160px;
   }
-  input::placeholder { color: rgba(255,255,255,0.7); }
-  input:focus, select:focus { background: rgba(255,255,255,0.3); box-shadow: 0 0 10px rgba(255,255,255,0.5); }
-  select option { color:#000; background:#fff; }
+  input:focus, select:focus { border-color: var(--info); background: rgba(0,0,0,0.5); }
+  select option { color: #000; background: #fff; }
 
+  /* Botões Compactos */
   button {
-    padding:10px 15px; background: var(--glass-strong); border:none; border-radius:12px;
-    color:var(--text); font-weight:600; cursor:pointer;
-    box-shadow: 4px 4px 8px rgba(0,0,0,0.4), -4px -4px 8px rgba(255,255,255,0.1);
-    transition: all .3s ease; display:flex; align-items:center; gap:6px;
+    padding: 8px 16px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 10px;
+    color: var(--text-primary); font-weight: 600; font-size: 0.8rem; cursor: pointer; 
+    transition: all .2s ease;
+    display: flex; align-items: center; gap: 6px; position: relative;
   }
-  button:hover { transform: translateY(-2px); box-shadow: 6px 6px 12px rgba(0,0,0,0.5), -6px -6px 12px rgba(255,255,255,0.15); background: rgba(255,255,255,0.3); }
-  button.ativo { background: rgba(77,255,136,0.3); border: 1px solid #4dff88; }
+  button:hover { background: rgba(255,255,255,0.1); transform: translateY(-1px); }
+  
+  #btnBuscar { background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.3); color: var(--info); }
 
-  .resumo { text-align:center; margin-bottom: 10px; color: rgba(255,255,255,0.85); }
+  button.ativo { border-color: var(--accent); background: rgba(0, 255, 136, 0.1); color: var(--accent); }
+  button.ativo::after { content: ''; position: absolute; bottom: -1px; left: 25%; width: 50%; height: 2px; background: var(--accent); }
 
-  .cards { display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:20px; }
+  button i.lucide { width: 14px; height: 14px; stroke-width: 2.5px; }
+
+  .resumo { text-align: center; margin-bottom: 15px; font-size: 0.8rem; color: var(--info); font-weight: 500; }
+
+  /* Grade de Cards mais apertada para caber mais itens */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 15px; }
+  
   .card {
-    background: var(--glass-bg); backdrop-filter: blur(12px);
-    border-radius:15px; padding:20px; box-shadow: 0 4px 30px rgba(0,0,0,0.1);
-    transition: all .3s ease; animation: fadeIn .5s ease forwards;
+    background: var(--glass-bg); backdrop-filter: blur(15px);
+    border-radius: 16px; padding: 16px; border: 1px solid var(--glass-border);
+    transition: all .3s ease; 
   }
-  .card:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 8px 40px rgba(0,0,0,0.3); }
-  @keyframes fadeIn { from {opacity:0; transform: translateY(10px);} to {opacity:1; transform: translateY(0);} }
+  .card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.15); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
 
-  .card-header { font-size:1.05rem; font-weight:600; margin-bottom:12px; color:#fff; }
-  .metrics { display:grid; grid-template-columns: repeat(3, 1fr); gap:8px; margin-bottom:12px; }
-  .metric { background: rgba(255,255,255,0.15); padding:8px; border-radius:8px; text-align:center; font-size:0.85rem; color:#fff; }
-  .metric span { display:block; font-weight:700; font-size:1rem; }
-  .details { font-size:0.85rem; color: rgba(255,255,255,0.85); display:flex; flex-wrap:wrap; gap:6px; }
-  .tag { background: rgba(255,255,255,0.15); padding:4px 8px; border-radius:6px; }
+  .card-header { font-size: 0.95rem; font-weight: 600; margin-bottom: 12px; line-height: 1.3; color: #fff; display: flex; gap: 8px;}
+  .card-header i.lucide-package { width: 16px; height: 16px; color: var(--text-secondary); margin-top: 2px; flex-shrink: 0;}
 
-  .alert { color:#ff4d4d; }
-  .ok { color:#4dff88; }
-  .info { color:#4da6ff; }
-  .muted { color: rgba(255,255,255,0.7); }
+  /* Metrics menores */
+  .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+  .metric { 
+    background: rgba(0, 0, 0, 0.4); padding: 8px 4px; border-radius: 10px; 
+    text-align: center; font-size: 0.65rem; color: var(--text-secondary);
+    border: 1px solid rgba(255,255,255,0.03);
+  }
+  .metric span { display: block; font-weight: 700; font-size: 1rem; margin-bottom: 0px; color: #fff; }
 
-  .spinner { border:3px solid rgba(255,255,255,0.3); border-top:3px solid #fff; border-radius:50%; width:18px; height:18px; animation: spin 0.8s linear infinite; }
-  @keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
+  /* Glows discretos */
+  .metric.ok span { color: var(--accent); text-shadow: 0 0 8px rgba(0, 255, 136, 0.2); }
+  .metric.alert span { color: var(--alert); text-shadow: 0 0 8px rgba(255, 77, 77, 0.2); }
+  .metric.info span { color: var(--info); text-shadow: 0 0 8px rgba(56, 189, 248, 0.2); }
+
+  .details { display: flex; flex-wrap: wrap; gap: 6px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 12px; }
+  .tag { 
+    background: rgba(255, 255, 255, 0.04); padding: 3px 8px; border-radius: 6px; 
+    font-size: 0.65rem; color: var(--text-secondary); font-weight: 500;
+  }
+
+  .spinner { border: 2px solid rgba(255,255,255,0.05); border-top-color: var(--info); border-radius: 50%; width: 25px; height: 25px; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  label { position: absolute; left: -9999px; }
 </style>
 </head>
 <body>
 
-<h2>🔍 Busca de Produtos</h2>
-<h3>Grade de estoque + Previsão de pedidos - CDD Araçatuba - Atualizado 26/03/2026 08:43</h3>
+<h2>Busca de Produtos</h2>
+<h3>Atualizado • 27/03/2026 08:40</h3>
 
-<div class="filtros" role="region" aria-label="Filtros de busca">
+<div class="filtros">
   <div class="linha">
-    <label for="codigoInput">Código do produto</label>
-    <input type="text" id="codigoInput" placeholder="Código do produto">
-    <label for="nomeInput">Nome do produto</label>
-    <input type="text" id="nomeInput" placeholder="Nome/descrição (busca parcial)">
-    <button id="btnBuscar" title="Buscar (Enter)">🔍 Buscar</button>
-    <button id="btnLimpar" title="Limpar filtros">🧹 Limpar</button>
+    <input type="text" id="codigoInput" placeholder="Cód. Exato" autocomplete="off">
+    <input type="text" id="nomeInput" placeholder="Descrição...">
+    <button id="btnBuscar"><i data-lucide="search"></i> Buscar</button>
+    <button id="btnLimpar"><i data-lucide="eraser"></i> Limpar</button>
   </div>
   <div class="linha">
-    <label for="categoriaSelect">Categoria</label>
     <select id="categoriaSelect">
-      <option value="">Categoria</option>
+      <option value="">Todas Categorias</option>
       <option value="NAB">NAB</option>
       <option value="CERVEJA">CERVEJA</option>
       <option value="MKTP">MKTP</option>
       <option value="MATCH">MATCH</option>
     </select>
-
-    <label for="clusterSelect">Cluster de Demanda</label>
+    
     <select id="clusterSelect">
-      <option value="">Cluster Demanda</option>
+      <option value="">Todos Clusters</option>
       <option value="AFFORDABLE">AFFORDABLE</option>
-      <option value="HE">HE</option>
       <option value="CORE">CORE</option>
-      <option value="ESTRATEGICO">ESTRATEGICO</option>
-      <option value="VALUE">VALUE</option>
-      <option value="CRAFT">CRAFT</option>
-      <option value="MARKET PLACE">MARKET PLACE</option>
-      <option value="INNO - CORE">INNO - CORE</option>
-      <option value="INNO - ESTRATEGICO">INNO - ESTRATEGICO</option>
-      <option value="MATCH">MATCH</option>
       <option value="CORE PLUS">CORE PLUS</option>
-      <option value="INNO - HE">INNO - HE</option>
-      <option value="INNO - AFFORDABLE">INNO - AFFORDABLE</option>
-      <option value="INNO - CORE PLUS">INNO - CORE PLUS</option>
-      <option value="INNO - MATCH">INNO - MATCH</option>
+      <option value="CRAFT">CRAFT</option>
       <option value="DUMMY">DUMMY</option>
+      <option value="ESTRATEGICO">ESTRATEGICO</option>
+      <option value="HE">HE</option>
+      <option value="INNO - AFFORDABLE">INNO - AFFORDABLE</option>
+      <option value="INNO - CORE">INNO - CORE</option>
+      <option value="INNO - CORE PLUS">INNO - CORE PLUS</option>
+      <option value="INNO - ESTRATEGICO">INNO - ESTRATEGICO</option>
+      <option value="INNO - HE">INNO - HE</option>
+      <option value="INNO - MATCH">INNO - MATCH</option>
+      <option value="MARKET PLACE">MARKET PLACE</option>
+      <option value="MATCH">MATCH</option>
+      <option value="VALUE">VALUE</option>
     </select>
 
-    <button id="btnTransito" data-extra="Transito" title="Filtrar por Trânsito">🚚 Trânsito</button>
-    <button id="btnD0" data-extra="MarcMarcD0" title="Filtrar por D0">⏱️ D0</button>
-    <button id="btnD1" data-extra="MarcMarcD1" title="Filtrar por D1">📦 D1</button>
-    <button id="btnD2" data-extra="MarcMarcD2" title="Filtrar por D2">📦 D2</button>
+    <button id="btnTransito" data-extra="Transito"><i data-lucide="truck"></i> Trânsito</button>
+    <button id="btnD0" data-extra="MarcMarcD0"><i data-lucide="timer"></i> D0</button>
+    <button id="btnD1" data-extra="MarcMarcD1"><i data-lucide="box"></i> D1</button>
+    <button id="btnD2" data-extra="MarcMarcD2"><i data-lucide="box"></i> D2</button>
   </div>
 </div>
 
-<p class="resumo" id="resumo" aria-live="polite"></p>
-<div id="resultado" class="cards" aria-live="polite"></div>
+<p class="resumo" id="resumo"></p>
+<div id="resultado" class="cards"></div>
 
 <script>
-  // --- Dados (note o campo FamiliaEmbalagem padronizado) ---
+  lucide.createIcons();
+
   const produtos = [
     {
         "CodigoProduto": 253,
@@ -171,8 +192,8 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "AFFORDABLE",
         "UnidadeMedida": "Caixa",
-        "CXS": 2.156,
-        "PLT": 21,
+        "CXS": 1.922,
+        "PLT": 19,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -188,11 +209,11 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 1.581,
-        "PLT": 15,
+        "CXS": 1.374,
+        "PLT": 13,
         "Transito": 0,
         "MarcMarcD0": 0,
-        "MarcMarcD1": 0,
+        "MarcMarcD1": 1,
         "MarcMarcD2": 0
     },
     {
@@ -222,11 +243,11 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "HE",
         "UnidadeMedida": "Litro",
-        "CXS": 47,
-        "PLT": 1,
-        "Transito": 0,
-        "MarcMarcD0": 40,
-        "MarcMarcD1": 32,
+        "CXS": 29,
+        "PLT": 0,
+        "Transito": 40,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
     {
@@ -239,8 +260,8 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "HE",
         "UnidadeMedida": "Litro",
-        "CXS": 33,
-        "PLT": 1,
+        "CXS": 14,
+        "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -256,11 +277,11 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 920,
-        "PLT": 21,
+        "CXS": 845,
+        "PLT": 20,
         "Transito": 0,
-        "MarcMarcD0": 0,
-        "MarcMarcD1": 16,
+        "MarcMarcD0": 16,
+        "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
     {
@@ -273,10 +294,10 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 679,
-        "PLT": 16,
+        "CXS": 763,
+        "PLT": 18,
         "Transito": 0,
-        "MarcMarcD0": 28,
+        "MarcMarcD0": 0,
         "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
@@ -307,11 +328,11 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "AFFORDABLE",
         "UnidadeMedida": "Caixa",
-        "CXS": 406,
-        "PLT": 4,
+        "CXS": 359,
+        "PLT": 3,
         "Transito": 0,
-        "MarcMarcD0": 0,
-        "MarcMarcD1": 4,
+        "MarcMarcD0": 8,
+        "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
     {
@@ -324,11 +345,11 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Duzia",
-        "CXS": 2.263,
-        "PLT": 45,
+        "CXS": 2.181,
+        "PLT": 43,
         "Transito": 0,
-        "MarcMarcD0": 0,
-        "MarcMarcD1": 2,
+        "MarcMarcD0": 6,
+        "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
     {
@@ -341,11 +362,11 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Duzia",
-        "CXS": 1.395,
-        "PLT": 27,
-        "Transito": 0,
-        "MarcMarcD0": 20,
-        "MarcMarcD1": 0,
+        "CXS": 2.321,
+        "PLT": 46,
+        "Transito": 20,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 11,
         "MarcMarcD2": 0
     },
     {
@@ -375,10 +396,10 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Duzia",
-        "CXS": 2.276,
-        "PLT": 45,
+        "CXS": 2.638,
+        "PLT": 52,
         "Transito": 0,
-        "MarcMarcD0": 0,
+        "MarcMarcD0": 11,
         "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
@@ -392,7 +413,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 126,
+        "CXS": 125,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -426,11 +447,11 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "VALUE",
         "UnidadeMedida": "Caixa",
-        "CXS": 1.27,
+        "CXS": 1.356,
         "PLT": 4,
-        "Transito": 0,
-        "MarcMarcD0": 1,
-        "MarcMarcD1": 0,
+        "Transito": 1,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 1,
         "MarcMarcD2": 0
     },
     {
@@ -443,7 +464,7 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "AFFORDABLE",
         "UnidadeMedida": "Caixa",
-        "CXS": 1.524,
+        "CXS": 1.483,
         "PLT": 8,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -460,10 +481,10 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 2.94,
-        "PLT": 29,
-        "Transito": 0,
-        "MarcMarcD0": 4,
+        "CXS": 2.778,
+        "PLT": 27,
+        "Transito": 1,
+        "MarcMarcD0": 11,
         "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
@@ -477,11 +498,11 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 8,
+        "CXS": 5,
         "PLT": 0,
         "Transito": 0,
-        "MarcMarcD0": 0,
-        "MarcMarcD1": 1,
+        "MarcMarcD0": 1,
+        "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
     {
@@ -494,10 +515,10 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 2.594,
-        "PLT": 25,
+        "CXS": 2.461,
+        "PLT": 24,
         "Transito": 0,
-        "MarcMarcD0": 0,
+        "MarcMarcD0": 5,
         "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
@@ -528,11 +549,11 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "HE",
         "UnidadeMedida": "Litro",
-        "CXS": 97,
-        "PLT": 3,
+        "CXS": 87,
+        "PLT": 2,
         "Transito": 0,
         "MarcMarcD0": 0,
-        "MarcMarcD1": 48,
+        "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
     {
@@ -545,10 +566,10 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "HE",
         "UnidadeMedida": "Litro",
-        "CXS": 27,
-        "PLT": 1,
-        "Transito": 16,
-        "MarcMarcD0": 8,
+        "CXS": 51,
+        "PLT": 2,
+        "Transito": 8,
+        "MarcMarcD0": 0,
         "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
@@ -562,8 +583,8 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 3.549,
-        "PLT": 84,
+        "CXS": 3.274,
+        "PLT": 77,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -579,7 +600,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 39,
+        "CXS": 34,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -596,8 +617,8 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 2.694,
-        "PLT": 64,
+        "CXS": 2.56,
+        "PLT": 60,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -613,8 +634,8 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - CORE PLUS",
         "UnidadeMedida": "Caixa",
-        "CXS": 79,
-        "PLT": 1,
+        "CXS": 85,
+        "PLT": 2,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -630,7 +651,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CRAFT",
         "UnidadeMedida": "Caixa",
-        "CXS": 0,
+        "CXS": 1,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -732,7 +753,7 @@
         "CategoriaPPMS": "MINALBA",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 55,
+        "CXS": 84,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -749,9 +770,26 @@
         "CategoriaPPMS": "MINALBA",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 12,
+        "CXS": 48,
         "PLT": 0,
         "Transito": 0,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 0
+    },
+    {
+        "CodigoProduto": 4262,
+        "DescricaoProduto": "MICHELOB ULTRA N LT SLEEK 350ML C 8 CX CARTAO",
+        "FamliaEmbalagem": "LT 350ML",
+        "Embalagem": "LT 350ML CX 8",
+        "Categoria": "CERVEJA",
+        "Subcategoria": "CERVEJA COM ALCOOL",
+        "CategoriaPPMS": "CERVEJA",
+        "ClusterDemanda": "INNO - HE",
+        "UnidadeMedida": "Caixa",
+        "CXS": 805,
+        "PLT": 2,
+        "Transito": 2,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
         "MarcMarcD2": 0
@@ -783,8 +821,8 @@
         "CategoriaPPMS": "MINALBA",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 12,
-        "PLT": 0,
+        "CXS": 157,
+        "PLT": 1,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -834,10 +872,10 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 765,
-        "PLT": 7,
+        "CXS": 604,
+        "PLT": 6,
         "Transito": 0,
-        "MarcMarcD0": 0,
+        "MarcMarcD0": 5,
         "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
@@ -868,7 +906,7 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "AFFORDABLE",
         "UnidadeMedida": "Caixa",
-        "CXS": 1,
+        "CXS": 0,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -885,8 +923,25 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 2.024,
+        "CXS": 1.926,
         "PLT": 6,
+        "Transito": 0,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 0
+    },
+    {
+        "CodigoProduto": 7979,
+        "DescricaoProduto": "GATORADE FRUTAS CITRICAS PET 500ML SIXPACK",
+        "FamliaEmbalagem": "PET SPORT 500ML",
+        "Embalagem": "PET SPORT 500ML SP",
+        "Categoria": "NAB",
+        "Subcategoria": "ISOTONICO",
+        "CategoriaPPMS": "REFRI",
+        "ClusterDemanda": "ESTRATEGICO",
+        "UnidadeMedida": "Caixa",
+        "CXS": 12,
+        "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -902,7 +957,7 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 55,
+        "CXS": 19,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -919,11 +974,11 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 1.715,
+        "CXS": 1.595,
         "PLT": 5,
         "Transito": 0,
         "MarcMarcD0": 0,
-        "MarcMarcD1": 0,
+        "MarcMarcD1": 4,
         "MarcMarcD2": 0
     },
     {
@@ -936,7 +991,7 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 3.728,
+        "CXS": 3.54,
         "PLT": 12,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -953,8 +1008,8 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 7.487,
-        "PLT": 25,
+        "CXS": 7.188,
+        "PLT": 24,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -987,11 +1042,11 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "AFFORDABLE",
         "UnidadeMedida": "Caixa",
-        "CXS": 120,
-        "PLT": 1,
+        "CXS": 114,
+        "PLT": 0,
         "Transito": 0,
-        "MarcMarcD0": 0,
-        "MarcMarcD1": 1,
+        "MarcMarcD0": 1,
+        "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
     {
@@ -1004,7 +1059,7 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 122,
+        "CXS": 121,
         "PLT": 1,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -1042,7 +1097,7 @@
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
-        "MarcMarcD1": 6,
+        "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
     {
@@ -1055,11 +1110,11 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 542,
+        "CXS": 517,
         "PLT": 3,
         "Transito": 0,
-        "MarcMarcD0": 0,
-        "MarcMarcD1": 3,
+        "MarcMarcD0": 3,
+        "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
     {
@@ -1072,12 +1127,12 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 98,
+        "CXS": 87,
         "PLT": 0,
         "Transito": 0,
-        "MarcMarcD0": 0,
-        "MarcMarcD1": 1,
-        "MarcMarcD2": 0
+        "MarcMarcD0": 1,
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 1
     },
     {
         "CodigoProduto": 8919,
@@ -1089,8 +1144,8 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 297,
-        "PLT": 2,
+        "CXS": 283,
+        "PLT": 1,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -1106,7 +1161,7 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 268,
+        "CXS": 259,
         "PLT": 1,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -1140,11 +1195,11 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 645,
-        "PLT": 2,
+        "CXS": 25,
+        "PLT": 0,
         "Transito": 0,
-        "MarcMarcD0": 17,
-        "MarcMarcD1": 3,
+        "MarcMarcD0": 55,
+        "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
     {
@@ -1157,10 +1212,10 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 8.848,
-        "PLT": 30,
+        "CXS": 14.798,
+        "PLT": 51,
         "Transito": 0,
-        "MarcMarcD0": 52,
+        "MarcMarcD0": 0,
         "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
@@ -1174,10 +1229,10 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 12.721,
-        "PLT": 44,
+        "CXS": 11.417,
+        "PLT": 39,
         "Transito": 0,
-        "MarcMarcD0": 22,
+        "MarcMarcD0": 0,
         "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
@@ -1191,7 +1246,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 1.098,
+        "CXS": 1.066,
         "PLT": 3,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -1208,7 +1263,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 775,
+        "CXS": 700,
         "PLT": 2,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -1225,7 +1280,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 501,
+        "CXS": 480,
         "PLT": 2,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -1242,12 +1297,12 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 1.501,
-        "PLT": 5,
+        "CXS": 1.424,
+        "PLT": 4,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
-        "MarcMarcD2": 0
+        "MarcMarcD2": 1
     },
     {
         "CodigoProduto": 9085,
@@ -1259,7 +1314,7 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 1.675,
+        "CXS": 1.627,
         "PLT": 5,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -1310,28 +1365,11 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 656,
+        "CXS": 574,
         "PLT": 2,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
-        "MarcMarcD2": 0
-    },
-    {
-        "CodigoProduto": 9092,
-        "DescricaoProduto": "TONICA ANTARCTICA DIET LATA 350ML SH C/12 NPAL",
-        "FamliaEmbalagem": "LT 350ML",
-        "Embalagem": "LT 350ML SH 12",
-        "Categoria": "NAB",
-        "Subcategoria": "REFRIGERANTE",
-        "CategoriaPPMS": "REFRI",
-        "ClusterDemanda": "ESTRATEGICO",
-        "UnidadeMedida": "Caixa",
-        "CXS": 1,
-        "PLT": 0,
-        "Transito": 0,
-        "MarcMarcD0": 0,
-        "MarcMarcD1": 1,
         "MarcMarcD2": 0
     },
     {
@@ -1361,11 +1399,11 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 606,
+        "CXS": 575,
         "PLT": 2,
         "Transito": 0,
-        "MarcMarcD0": 0,
-        "MarcMarcD1": 2,
+        "MarcMarcD0": 2,
+        "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
     {
@@ -1395,12 +1433,12 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 2.495,
-        "PLT": 24,
+        "CXS": 2.254,
+        "PLT": 22,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
-        "MarcMarcD2": 0
+        "MarcMarcD2": 4
     },
     {
         "CodigoProduto": 9320,
@@ -1412,7 +1450,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 197,
+        "CXS": 182,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -1429,7 +1467,7 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 4,
+        "CXS": 1,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -1446,11 +1484,11 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 2.042,
+        "CXS": 1.973,
         "PLT": 11,
         "Transito": 0,
         "MarcMarcD0": 0,
-        "MarcMarcD1": 0,
+        "MarcMarcD1": 1,
         "MarcMarcD2": 0
     },
     {
@@ -1463,11 +1501,11 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 108,
+        "CXS": 57,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
-        "MarcMarcD1": 6,
+        "MarcMarcD1": 8,
         "MarcMarcD2": 0
     },
     {
@@ -1514,7 +1552,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 1.72,
+        "CXS": 1.706,
         "PLT": 9,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -1531,7 +1569,7 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "AFFORDABLE",
         "UnidadeMedida": "Duzia",
-        "CXS": 34,
+        "CXS": 32,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -1548,8 +1586,8 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 6.373,
-        "PLT": 22,
+        "CXS": 6.127,
+        "PLT": 21,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -1565,11 +1603,11 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 3.337,
-        "PLT": 19,
+        "CXS": 3.105,
+        "PLT": 18,
         "Transito": 0,
-        "MarcMarcD0": 0,
-        "MarcMarcD1": 2,
+        "MarcMarcD0": 2,
+        "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
     {
@@ -1582,8 +1620,8 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 3.008,
-        "PLT": 26,
+        "CXS": 2.859,
+        "PLT": 24,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -1633,7 +1671,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 7,
+        "CXS": 6,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -1650,11 +1688,11 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 8.451,
-        "PLT": 93,
-        "Transito": 27,
-        "MarcMarcD0": 0,
-        "MarcMarcD1": 28,
+        "CXS": 6.99,
+        "PLT": 77,
+        "Transito": 0,
+        "MarcMarcD0": 28,
+        "MarcMarcD1": 75,
         "MarcMarcD2": 0
     },
     {
@@ -1667,11 +1705,11 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 14.88,
-        "PLT": 165,
+        "CXS": 10.731,
+        "PLT": 119,
         "Transito": 0,
         "MarcMarcD0": 0,
-        "MarcMarcD1": 0,
+        "MarcMarcD1": 62,
         "MarcMarcD2": 0
     },
     {
@@ -1684,10 +1722,10 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 11.704,
-        "PLT": 130,
-        "Transito": 36,
-        "MarcMarcD0": 87,
+        "CXS": 13.678,
+        "PLT": 151,
+        "Transito": 4,
+        "MarcMarcD0": 37,
         "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
@@ -1718,7 +1756,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "MATCH",
         "UnidadeMedida": "Caixa",
-        "CXS": 592,
+        "CXS": 580,
         "PLT": 1,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -1735,7 +1773,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE PLUS",
         "UnidadeMedida": "Caixa",
-        "CXS": 0,
+        "CXS": 8,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -1769,7 +1807,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 307,
+        "CXS": 298,
         "PLT": 1,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -1786,7 +1824,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CRAFT",
         "UnidadeMedida": "Caixa",
-        "CXS": 2,
+        "CXS": 0,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -1820,7 +1858,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 2,
+        "CXS": 0,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -1837,7 +1875,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CRAFT",
         "UnidadeMedida": "Caixa",
-        "CXS": 16,
+        "CXS": 15,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -1854,8 +1892,8 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 8.355,
-        "PLT": 42,
+        "CXS": 8.041,
+        "PLT": 41,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -1871,8 +1909,8 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 33.389,
-        "PLT": 171,
+        "CXS": 32.554,
+        "PLT": 166,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -1905,8 +1943,8 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 5.037,
-        "PLT": 25,
+        "CXS": 4.573,
+        "PLT": 23,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -1922,8 +1960,25 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE PLUS",
         "UnidadeMedida": "Caixa",
-        "CXS": 781,
-        "PLT": 9,
+        "CXS": 745,
+        "PLT": 8,
+        "Transito": 0,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 5,
+        "MarcMarcD2": 0
+    },
+    {
+        "CodigoProduto": 18137,
+        "DescricaoProduto": "GUARANA CHP ANTARCTICA PET 3L C/04 SHRINK LISO",
+        "FamliaEmbalagem": "PET 3L",
+        "Embalagem": "PET 3L SH 4",
+        "Categoria": "NAB",
+        "Subcategoria": "REFRIGERANTE",
+        "CategoriaPPMS": "REFRI",
+        "ClusterDemanda": "AFFORDABLE",
+        "UnidadeMedida": "Caixa",
+        "CXS": 0,
+        "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -1956,11 +2011,11 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 1.043,
-        "PLT": 2,
+        "CXS": 562,
+        "PLT": 1,
         "Transito": 0,
-        "MarcMarcD0": 0,
-        "MarcMarcD1": 6,
+        "MarcMarcD0": 7,
+        "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
     {
@@ -1973,7 +2028,7 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 376,
+        "CXS": 366,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -1990,28 +2045,11 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 594,
+        "CXS": 577,
         "PLT": 1,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
-        "MarcMarcD2": 0
-    },
-    {
-        "CodigoProduto": 18268,
-        "DescricaoProduto": "SUKITA PET 200ML SH C/12",
-        "FamliaEmbalagem": "PET 200ML",
-        "Embalagem": "PET 200ML SH 12",
-        "Categoria": "NAB",
-        "Subcategoria": "REFRIGERANTE",
-        "CategoriaPPMS": "REFRI",
-        "ClusterDemanda": "ESTRATEGICO",
-        "UnidadeMedida": "Caixa",
-        "CXS": 7,
-        "PLT": 0,
-        "Transito": 0,
-        "MarcMarcD0": 0,
-        "MarcMarcD1": 1,
         "MarcMarcD2": 0
     },
     {
@@ -2075,7 +2113,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CRAFT",
         "UnidadeMedida": "Caixa",
-        "CXS": 0,
+        "CXS": 1,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2092,7 +2130,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 1.04,
+        "CXS": 1.012,
         "PLT": 12,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2109,10 +2147,10 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 10,
-        "PLT": 0,
-        "Transito": 0,
-        "MarcMarcD0": 16,
+        "CXS": 153,
+        "PLT": 1,
+        "Transito": 2,
+        "MarcMarcD0": 0,
         "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
@@ -2160,8 +2198,8 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "INNO - AFFORDABLE",
         "UnidadeMedida": "Caixa",
-        "CXS": 9.653,
-        "PLT": 18,
+        "CXS": 10.478,
+        "PLT": 19,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -2177,7 +2215,7 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 770,
+        "CXS": 751,
         "PLT": 5,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2194,7 +2232,7 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 1.327,
+        "CXS": 1.276,
         "PLT": 2,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2211,7 +2249,7 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 233,
+        "CXS": 194,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2245,8 +2283,8 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 6.988,
-        "PLT": 24,
+        "CXS": 6.62,
+        "PLT": 23,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -2262,25 +2300,8 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 4.302,
-        "PLT": 10,
-        "Transito": 0,
-        "MarcMarcD0": 0,
-        "MarcMarcD1": 0,
-        "MarcMarcD2": 0
-    },
-    {
-        "CodigoProduto": 19520,
-        "DescricaoProduto": "CHOPP COLORADO LAGER BARRIL KEG 30L NPAL",
-        "FamliaEmbalagem": "KEG 30L",
-        "Embalagem": "KEG 30L",
-        "Categoria": "CERVEJA",
-        "Subcategoria": "CHOPP",
-        "CategoriaPPMS": "CERVEJA",
-        "ClusterDemanda": "CRAFT",
-        "UnidadeMedida": "Litro",
-        "CXS": 4,
-        "PLT": 0,
+        "CXS": 3.857,
+        "PLT": 9,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -2313,7 +2334,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 4.733,
+        "CXS": 4.708,
         "PLT": 11,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2364,11 +2385,11 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 4.935,
-        "PLT": 54,
-        "Transito": 10,
-        "MarcMarcD0": 12,
-        "MarcMarcD1": 17,
+        "CXS": 8.297,
+        "PLT": 92,
+        "Transito": 12,
+        "MarcMarcD0": 21,
+        "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
     {
@@ -2381,7 +2402,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - CORE PLUS",
         "UnidadeMedida": "Caixa",
-        "CXS": 104,
+        "CXS": 103,
         "PLT": 2,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2398,7 +2419,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 443,
+        "CXS": 439,
         "PLT": 10,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2415,7 +2436,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 1,
+        "CXS": 0,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2432,7 +2453,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - CORE PLUS",
         "UnidadeMedida": "Caixa",
-        "CXS": 417,
+        "CXS": 380,
         "PLT": 4,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2449,7 +2470,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 13,
+        "CXS": 9,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2483,7 +2504,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 1.151,
+        "CXS": 1.124,
         "PLT": 2,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2500,7 +2521,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CRAFT",
         "UnidadeMedida": "Caixa",
-        "CXS": 7,
+        "CXS": 5,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2517,8 +2538,8 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE PLUS",
         "UnidadeMedida": "Caixa",
-        "CXS": 9.05,
-        "PLT": 32,
+        "CXS": 8.651,
+        "PLT": 30,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -2551,7 +2572,7 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "AFFORDABLE",
         "UnidadeMedida": "Caixa",
-        "CXS": 487,
+        "CXS": 473,
         "PLT": 4,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2568,7 +2589,7 @@
         "CategoriaPPMS": "DIAGEO",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Unidade",
-        "CXS": 1.512,
+        "CXS": 1.504,
         "PLT": 2,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2619,7 +2640,7 @@
         "CategoriaPPMS": "DIAGEO",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Unidade",
-        "CXS": 1.364,
+        "CXS": 1.35,
         "PLT": 2,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2636,11 +2657,11 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 643,
-        "PLT": 2,
+        "CXS": 247,
+        "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
-        "MarcMarcD1": 0,
+        "MarcMarcD1": 8,
         "MarcMarcD2": 0
     },
     {
@@ -2653,7 +2674,7 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 33,
+        "CXS": 27,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2670,7 +2691,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 364,
+        "CXS": 359,
         "PLT": 4,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2704,7 +2725,7 @@
         "CategoriaPPMS": "UNMAPPED",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Unidade",
-        "CXS": 4.163,
+        "CXS": 4.016,
         "PLT": 5,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2721,7 +2742,7 @@
         "CategoriaPPMS": "DIAGEO",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 228,
+        "CXS": 224,
         "PLT": 2,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2738,7 +2759,24 @@
         "CategoriaPPMS": "PERNOD RICARD",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Unidade",
-        "CXS": 19,
+        "CXS": 20,
+        "PLT": 0,
+        "Transito": 0,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 0
+    },
+    {
+        "CodigoProduto": 21789,
+        "DescricaoProduto": "ORLOFF GARRAFA VIDRO 1 L",
+        "FamliaEmbalagem": "GRF 1L",
+        "Embalagem": "GRF 1L",
+        "Categoria": "MKTP",
+        "Subcategoria": "HARD LIQUOR",
+        "CategoriaPPMS": "PERNOD RICARD",
+        "ClusterDemanda": "MARKET PLACE",
+        "UnidadeMedida": "Unidade",
+        "CXS": 0,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2755,7 +2793,7 @@
         "CategoriaPPMS": "CIA MULLER",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Unidade",
-        "CXS": 4.146,
+        "CXS": 4.075,
         "PLT": 4,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2772,7 +2810,7 @@
         "CategoriaPPMS": "DIAGEO",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Unidade",
-        "CXS": 60,
+        "CXS": 273,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2916,6 +2954,23 @@
         "MarcMarcD2": 0
     },
     {
+        "CodigoProduto": 21956,
+        "DescricaoProduto": "BALLANTINES 12 YEARS GARRAFA VIDRO 1 L",
+        "FamliaEmbalagem": "GRF 1L",
+        "Embalagem": "GRF 1L",
+        "Categoria": "MKTP",
+        "Subcategoria": "HARD LIQUOR",
+        "CategoriaPPMS": "PERNOD RICARD",
+        "ClusterDemanda": "MARKET PLACE",
+        "UnidadeMedida": "Unidade",
+        "CXS": 1,
+        "PLT": 0,
+        "Transito": 0,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 0
+    },
+    {
         "CodigoProduto": 21968,
         "DescricaoProduto": "TRIDENT HORTELA ENVELOPE 8G CX C/21",
         "FamliaEmbalagem": "ENV 8G",
@@ -2925,7 +2980,7 @@
         "CategoriaPPMS": "MONDELEZ",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 58,
+        "CXS": 49,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -2942,7 +2997,7 @@
         "CategoriaPPMS": "MONDELEZ",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 272,
+        "CXS": 408,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -3027,7 +3082,7 @@
         "CategoriaPPMS": "MONDELEZ",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 65,
+        "CXS": 171,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -3061,7 +3116,24 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CRAFT",
         "UnidadeMedida": "Caixa",
-        "CXS": 4,
+        "CXS": 2,
+        "PLT": 0,
+        "Transito": 0,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 0
+    },
+    {
+        "CodigoProduto": 22051,
+        "DescricaoProduto": "BOAZINHA GARRAFA VD 600ML",
+        "FamliaEmbalagem": "GRF 600ML",
+        "Embalagem": "GRF 600ML",
+        "Categoria": "MKTP",
+        "Subcategoria": "CACHAÇA",
+        "CategoriaPPMS": "UNMAPPED",
+        "ClusterDemanda": "MARKET PLACE",
+        "UnidadeMedida": "Unidade",
+        "CXS": 0,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -3078,7 +3150,7 @@
         "CategoriaPPMS": "MONDELEZ",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 2,
+        "CXS": 0,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -3095,11 +3167,11 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - CORE PLUS",
         "UnidadeMedida": "Caixa",
-        "CXS": 1.904,
-        "PLT": 4,
-        "Transito": 0,
+        "CXS": 2.534,
+        "PLT": 6,
+        "Transito": 2,
         "MarcMarcD0": 0,
-        "MarcMarcD1": 0,
+        "MarcMarcD1": 3,
         "MarcMarcD2": 0
     },
     {
@@ -3112,11 +3184,11 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - CORE PLUS",
         "UnidadeMedida": "Caixa",
-        "CXS": 83,
+        "CXS": 70,
         "PLT": 0,
         "Transito": 0,
-        "MarcMarcD0": 0,
-        "MarcMarcD1": 1,
+        "MarcMarcD0": 1,
+        "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
     {
@@ -3146,7 +3218,7 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 2,
+        "CXS": 1,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -3231,7 +3303,7 @@
         "CategoriaPPMS": "PERNOD RICARD",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Unidade",
-        "CXS": 1.331,
+        "CXS": 1.31,
         "PLT": 2,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -3367,8 +3439,8 @@
         "CategoriaPPMS": "UNMAPPED",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Unidade",
-        "CXS": 578,
-        "PLT": 0,
+        "CXS": 760,
+        "PLT": 1,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -3392,6 +3464,23 @@
         "MarcMarcD2": 0
     },
     {
+        "CodigoProduto": 23030,
+        "DescricaoProduto": "JOHNNIE WALKER BLACK LABEL GARRAFA VIDRO 750ML",
+        "FamliaEmbalagem": "GARRAFA VIDRO 750ML",
+        "Embalagem": "GARRAFA VIDRO 750ML",
+        "Categoria": "MKTP",
+        "Subcategoria": "HARD LIQUOR",
+        "CategoriaPPMS": "DIAGEO",
+        "ClusterDemanda": "MARKET PLACE",
+        "UnidadeMedida": "Unidade",
+        "CXS": 0,
+        "PLT": 0,
+        "Transito": 0,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 0
+    },
+    {
         "CodigoProduto": 23163,
         "DescricaoProduto": "SUKITA TUBAINA PET 2L SHRINK C/6",
         "FamliaEmbalagem": "PET 2L",
@@ -3401,11 +3490,11 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "AFFORDABLE",
         "UnidadeMedida": "Caixa",
-        "CXS": 134,
+        "CXS": 126,
         "PLT": 1,
         "Transito": 0,
-        "MarcMarcD0": 0,
-        "MarcMarcD1": 1,
+        "MarcMarcD0": 5,
+        "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
     {
@@ -3435,8 +3524,8 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 679,
-        "PLT": 16,
+        "CXS": 649,
+        "PLT": 15,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -3486,7 +3575,7 @@
         "CategoriaPPMS": "PIRACANJUBA",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 45,
+        "CXS": 44,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -3622,7 +3711,7 @@
         "CategoriaPPMS": "UNMAPPED",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 46,
+        "CXS": 45,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -3673,7 +3762,7 @@
         "CategoriaPPMS": "UNMAPPED",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 35,
+        "CXS": 34,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -3690,7 +3779,7 @@
         "CategoriaPPMS": "MINALBA",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 0,
+        "CXS": 25,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -3749,6 +3838,23 @@
         "MarcMarcD2": 0
     },
     {
+        "CodigoProduto": 24057,
+        "DescricaoProduto": "SAO LOURENCO AGUA MIN. C GAS GFA PET 300ML FD C 12",
+        "FamliaEmbalagem": "PET 300ML",
+        "Embalagem": "PET 300ML SH 12",
+        "Categoria": "MKTP",
+        "Subcategoria": "NAB",
+        "CategoriaPPMS": "MINALBA",
+        "ClusterDemanda": "MARKET PLACE",
+        "UnidadeMedida": "Caixa",
+        "CXS": 5,
+        "PLT": 0,
+        "Transito": 0,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 0
+    },
+    {
         "CodigoProduto": 24059,
         "DescricaoProduto": "SAO LOURENCO AGUA MIN. S GAS GFA PET 300ML FD C 12",
         "FamliaEmbalagem": "PET 300ML",
@@ -3792,7 +3898,7 @@
         "CategoriaPPMS": "MINALBA",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 5,
+        "CXS": 2,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -3860,7 +3966,7 @@
         "CategoriaPPMS": "UNMAPPED",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Unidade",
-        "CXS": 1.543,
+        "CXS": 1.535,
         "PLT": 1,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -4081,7 +4187,7 @@
         "CategoriaPPMS": "CIA MULLER",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 59,
+        "CXS": 83,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -4115,7 +4221,7 @@
         "CategoriaPPMS": "CIA MULLER",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Unidade",
-        "CXS": 6,
+        "CXS": 5,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -4150,6 +4256,74 @@
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Unidade",
         "CXS": 3,
+        "PLT": 0,
+        "Transito": 0,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 0
+    },
+    {
+        "CodigoProduto": 25333,
+        "DescricaoProduto": "SALTON ESPUMANTE MOSCATEL GFA VD 750 ML",
+        "FamliaEmbalagem": "GRF 750ML",
+        "Embalagem": "GRF 750ML",
+        "Categoria": "MKTP",
+        "Subcategoria": "WINE",
+        "CategoriaPPMS": "UNMAPPED",
+        "ClusterDemanda": "MARKET PLACE",
+        "UnidadeMedida": "Unidade",
+        "CXS": 7,
+        "PLT": 0,
+        "Transito": 0,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 0
+    },
+    {
+        "CodigoProduto": 25335,
+        "DescricaoProduto": "SALTON ESPUMANTE BRUT ROSE GFA VD 750 ML",
+        "FamliaEmbalagem": "GRF 750ML",
+        "Embalagem": "GRF 750ML",
+        "Categoria": "MKTP",
+        "Subcategoria": "WINE",
+        "CategoriaPPMS": "UNMAPPED",
+        "ClusterDemanda": "MARKET PLACE",
+        "UnidadeMedida": "Unidade",
+        "CXS": 13,
+        "PLT": 0,
+        "Transito": 0,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 0
+    },
+    {
+        "CodigoProduto": 25546,
+        "DescricaoProduto": "GARRAFEIRA PL. AL. LAT. AB. PRETA BEES 1 UN P/ 23 GFA 300ML",
+        "FamliaEmbalagem": "GARRAFEIRA",
+        "Embalagem": "GARRAF P 23GFA 300ML",
+        "Categoria": "MKTP",
+        "Subcategoria": "TRADE MATERIALS",
+        "CategoriaPPMS": "UNMAPPED",
+        "ClusterDemanda": "MARKET PLACE",
+        "UnidadeMedida": "Unidade",
+        "CXS": 3,
+        "PLT": 0,
+        "Transito": 0,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 0
+    },
+    {
+        "CodigoProduto": 26099,
+        "DescricaoProduto": "TRIDENT XFRESH INTENSE ENVELOPE 8G CX21_",
+        "FamliaEmbalagem": "ENV 8G",
+        "Embalagem": "ENV 8G CX 21",
+        "Categoria": "MKTP",
+        "Subcategoria": "SNACKS",
+        "CategoriaPPMS": "MONDELEZ",
+        "ClusterDemanda": "MARKET PLACE",
+        "UnidadeMedida": "Caixa",
+        "CXS": 0,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -4217,7 +4391,7 @@
         "CategoriaPPMS": "MONDELEZ",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 7,
+        "CXS": 6,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -4234,7 +4408,7 @@
         "CategoriaPPMS": "MONDELEZ",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 177,
+        "CXS": 225,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -4251,7 +4425,7 @@
         "CategoriaPPMS": "PERNOD RICARD",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Unidade",
-        "CXS": 1,
+        "CXS": 8,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -4285,7 +4459,7 @@
         "CategoriaPPMS": "UNMAPPED",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Unidade",
-        "CXS": 6,
+        "CXS": 5,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -4319,7 +4493,7 @@
         "CategoriaPPMS": "UNMAPPED",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Unidade",
-        "CXS": 4,
+        "CXS": 1,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -4412,6 +4586,23 @@
         "MarcMarcD2": 0
     },
     {
+        "CodigoProduto": 27866,
+        "DescricaoProduto": "CORONA CERO SUNBREW N LONG NECK 330 ML SP BASKET CX C4",
+        "FamliaEmbalagem": "LN 330ML",
+        "Embalagem": "LN 330ML SP SH 4",
+        "Categoria": "CERVEJA",
+        "Subcategoria": "CERVEJA SEM ALCOOL",
+        "CategoriaPPMS": "CERVEJA",
+        "ClusterDemanda": "INNO - HE",
+        "UnidadeMedida": "Caixa",
+        "CXS": 85,
+        "PLT": 1,
+        "Transito": 1,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 1,
+        "MarcMarcD2": 0
+    },
+    {
         "CodigoProduto": 28203,
         "DescricaoProduto": "BUBBALOO MORANGO DISPLAY 300G",
         "FamliaEmbalagem": "DISPLAY 300G",
@@ -4455,7 +4646,7 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 417,
+        "CXS": 414,
         "PLT": 3,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -4489,7 +4680,7 @@
         "CategoriaPPMS": "MONDELEZ",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 0,
+        "CXS": 1,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -4540,7 +4731,7 @@
         "CategoriaPPMS": "UNMAPPED",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Unidade",
-        "CXS": 29,
+        "CXS": 33,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -4557,6 +4748,23 @@
         "CategoriaPPMS": "UNMAPPED",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
+        "CXS": 1,
+        "PLT": 0,
+        "Transito": 0,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 0
+    },
+    {
+        "CodigoProduto": 29072,
+        "DescricaoProduto": "GALLO VINAGRE BALSAMICO TINTO FRASCO VIDRO 250ML",
+        "FamliaEmbalagem": "FRASC 250ML",
+        "Embalagem": "FRASC 250ML",
+        "Categoria": "MKTP",
+        "Subcategoria": "BASIC FOOD",
+        "CategoriaPPMS": "UNMAPPED",
+        "ClusterDemanda": "MARKET PLACE",
+        "UnidadeMedida": "Unidade",
         "CXS": 1,
         "PLT": 0,
         "Transito": 0,
@@ -4693,11 +4901,11 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - HE",
         "UnidadeMedida": "Duzia",
-        "CXS": 904,
-        "PLT": 18,
-        "Transito": 0,
-        "MarcMarcD0": 1,
-        "MarcMarcD1": 2,
+        "CXS": 951,
+        "PLT": 19,
+        "Transito": 1,
+        "MarcMarcD0": 4,
+        "MarcMarcD1": 1,
         "MarcMarcD2": 0
     },
     {
@@ -4710,7 +4918,7 @@
         "CategoriaPPMS": "UNMAPPED",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 3,
+        "CXS": 4,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -4786,6 +4994,40 @@
         "MarcMarcD2": 0
     },
     {
+        "CodigoProduto": 29495,
+        "DescricaoProduto": "GATORADE ZERO CAL FRUTAS SILV PET 350ML SH C12",
+        "FamliaEmbalagem": "PET SPORT 350ML",
+        "Embalagem": "PET SPORT 350ML SH 12",
+        "Categoria": "NAB",
+        "Subcategoria": "ISOTONICO",
+        "CategoriaPPMS": "REFRI",
+        "ClusterDemanda": "INNO - ESTRATEGICO",
+        "UnidadeMedida": "Caixa",
+        "CXS": 0,
+        "PLT": 0,
+        "Transito": 0,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 0
+    },
+    {
+        "CodigoProduto": 29518,
+        "DescricaoProduto": "JOHNNIE WALKER WHISKY BLONDE GFA VD 750 ML",
+        "FamliaEmbalagem": "GRF 750ML",
+        "Embalagem": "GRF 750ML",
+        "Categoria": "MKTP",
+        "Subcategoria": "HARD LIQUOR",
+        "CategoriaPPMS": "DIAGEO",
+        "ClusterDemanda": "MARKET PLACE",
+        "UnidadeMedida": "Unidade",
+        "CXS": 6,
+        "PLT": 0,
+        "Transito": 0,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 0
+    },
+    {
         "CodigoProduto": 29580,
         "DescricaoProduto": "STELLA ARTOIS PURE GOLD LONG NECK 330ML SP SH C/4",
         "FamliaEmbalagem": "LN 330ML",
@@ -4795,8 +5037,8 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 1.872,
-        "PLT": 22,
+        "CXS": 1.842,
+        "PLT": 21,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -4812,7 +5054,7 @@
         "CategoriaPPMS": "PERNOD RICARD",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Unidade",
-        "CXS": 3,
+        "CXS": 8,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -4829,12 +5071,12 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - CORE PLUS",
         "UnidadeMedida": "Caixa",
-        "CXS": 375,
-        "PLT": 4,
-        "Transito": 0,
+        "CXS": 159,
+        "PLT": 1,
+        "Transito": 27,
         "MarcMarcD0": 0,
-        "MarcMarcD1": 22,
-        "MarcMarcD2": 0
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 25
     },
     {
         "CodigoProduto": 29733,
@@ -4863,7 +5105,7 @@
         "CategoriaPPMS": "DIAGEO",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Unidade",
-        "CXS": 3,
+        "CXS": 1,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -4897,7 +5139,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - MATCH",
         "UnidadeMedida": "Caixa",
-        "CXS": 114,
+        "CXS": 102,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -4931,7 +5173,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 950,
+        "CXS": 927,
         "PLT": 11,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -4941,6 +5183,23 @@
     {
         "CodigoProduto": 31170,
         "DescricaoProduto": "HOCUS POCUS ORANGE SUNSHINE TER LT AL 350ML CX/6",
+        "FamliaEmbalagem": "LT 350ML",
+        "Embalagem": "LT 350ML CX 6",
+        "Categoria": "MKTP",
+        "Subcategoria": "HARD LIQUOR",
+        "CategoriaPPMS": "UNMAPPED",
+        "ClusterDemanda": "MARKET PLACE",
+        "UnidadeMedida": "Caixa",
+        "CXS": 1,
+        "PLT": 0,
+        "Transito": 0,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 0
+    },
+    {
+        "CodigoProduto": 31172,
+        "DescricaoProduto": "HOCUS POCUS AURA TER LT AL 350ML CX/6",
         "FamliaEmbalagem": "LT 350ML",
         "Embalagem": "LT 350ML CX 6",
         "Categoria": "MKTP",
@@ -5033,7 +5292,7 @@
         "CategoriaPPMS": "BEBIDA ALCOOLICA AROMATIZADA",
         "ClusterDemanda": "INNO - MATCH",
         "UnidadeMedida": "Caixa",
-        "CXS": 98,
+        "CXS": 95,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -5067,11 +5326,11 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "INNO - ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 194,
+        "CXS": 125,
         "PLT": 0,
         "Transito": 0,
-        "MarcMarcD0": 0,
-        "MarcMarcD1": 2,
+        "MarcMarcD0": 2,
+        "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
     {
@@ -5135,7 +5394,7 @@
         "CategoriaPPMS": "UNMAPPED",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 1,
+        "CXS": 0,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -5152,7 +5411,7 @@
         "CategoriaPPMS": "GRUPO VITON",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 4,
+        "CXS": 9,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -5169,7 +5428,24 @@
         "CategoriaPPMS": "GRUPO VITON",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 8,
+        "CXS": 11,
+        "PLT": 0,
+        "Transito": 0,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 0
+    },
+    {
+        "CodigoProduto": 32175,
+        "DescricaoProduto": "CROKISSIMO AMEND CROC LEV SALGADO PCT 24G FD/36",
+        "FamliaEmbalagem": "PCT 24G",
+        "Embalagem": "PCT 24G FD/36",
+        "Categoria": "MKTP",
+        "Subcategoria": "SNACKS",
+        "CategoriaPPMS": "UNMAPPED",
+        "ClusterDemanda": "MARKET PLACE",
+        "UnidadeMedida": "Caixa",
+        "CXS": 0,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -5203,7 +5479,7 @@
         "CategoriaPPMS": "UNMAPPED",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 319,
+        "CXS": 313,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -5220,7 +5496,7 @@
         "CategoriaPPMS": "UNMAPPED",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 154,
+        "CXS": 151,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -5254,7 +5530,7 @@
         "CategoriaPPMS": "MINALBA",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Unidade",
-        "CXS": 17,
+        "CXS": 15,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -5307,7 +5583,7 @@
         "UnidadeMedida": "Caixa",
         "CXS": 1,
         "PLT": 0,
-        "Transito": 2,
+        "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
         "MarcMarcD2": 0
@@ -5322,11 +5598,11 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 68,
+        "CXS": 48,
         "PLT": 0,
         "Transito": 0,
-        "MarcMarcD0": 0,
-        "MarcMarcD1": 1,
+        "MarcMarcD0": 1,
+        "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
     {
@@ -5415,6 +5691,23 @@
         "MarcMarcD2": 0
     },
     {
+        "CodigoProduto": 32644,
+        "DescricaoProduto": "BUBBALOO UVA DISPLAY 5G CX/60",
+        "FamliaEmbalagem": "DISPLAY 5G",
+        "Embalagem": "DISPLAY 5G CX 60",
+        "Categoria": "MKTP",
+        "Subcategoria": "SNACKS",
+        "CategoriaPPMS": "MONDELEZ",
+        "ClusterDemanda": "MARKET PLACE",
+        "UnidadeMedida": "Caixa",
+        "CXS": 0,
+        "PLT": 0,
+        "Transito": 0,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 0
+    },
+    {
         "CodigoProduto": 32646,
         "DescricaoProduto": "BUBBALOO TUTTI FRUTTI DISPLAY 5G CX/60",
         "FamliaEmbalagem": "DISPLAY 5G",
@@ -5425,6 +5718,23 @@
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
         "CXS": 39,
+        "PLT": 0,
+        "Transito": 0,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 0
+    },
+    {
+        "CodigoProduto": 32648,
+        "DescricaoProduto": "BUBBALOO MORANGO DISPLAY 5G CX/60",
+        "FamliaEmbalagem": "DISPLAY 5G",
+        "Embalagem": "DISPLAY 5G CX 60",
+        "Categoria": "MKTP",
+        "Subcategoria": "SNACKS",
+        "CategoriaPPMS": "MONDELEZ",
+        "ClusterDemanda": "MARKET PLACE",
+        "UnidadeMedida": "Caixa",
+        "CXS": 0,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -5458,7 +5768,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 92,
+        "CXS": 84,
         "PLT": 2,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -5475,7 +5785,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 37,
+        "CXS": 36,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -5509,7 +5819,7 @@
         "CategoriaPPMS": "Diageo",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 23,
+        "CXS": 19,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -5526,7 +5836,7 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 560,
+        "CXS": 549,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -5543,8 +5853,8 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "DUMMY",
         "UnidadeMedida": "Caixa",
-        "CXS": 1.898,
-        "PLT": 21,
+        "CXS": 1.871,
+        "PLT": 20,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -5594,7 +5904,7 @@
         "CategoriaPPMS": "MINALBA",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Unidade",
-        "CXS": 2,
+        "CXS": 0,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -5612,6 +5922,23 @@
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
         "CXS": 4,
+        "PLT": 0,
+        "Transito": 0,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 0
+    },
+    {
+        "CodigoProduto": 33324,
+        "DescricaoProduto": "ORIGINAL LT 269ML SH C 15 MULTPACK",
+        "FamliaEmbalagem": "LT 269ML",
+        "Embalagem": "LT 269ML SH 15",
+        "Categoria": "CERVEJA",
+        "Subcategoria": "CERVEJA COM ALCOOL",
+        "CategoriaPPMS": "CERVEJA",
+        "ClusterDemanda": "HE",
+        "UnidadeMedida": "Caixa",
+        "CXS": 0,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -5679,7 +6006,7 @@
         "CategoriaPPMS": "UNMAPPED",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 71,
+        "CXS": 114,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -5696,7 +6023,7 @@
         "CategoriaPPMS": "UNMAPPED",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 80,
+        "CXS": 85,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -5738,6 +6065,23 @@
         "MarcMarcD2": 0
     },
     {
+        "CodigoProduto": 33611,
+        "DescricaoProduto": "GUARANA CHP ANTARCTICA ONE WAY 300 ML CX C/23",
+        "FamliaEmbalagem": "GRF 300ML",
+        "Embalagem": "GRF 300ML CX 23",
+        "Categoria": "NAB",
+        "Subcategoria": "REFRIGERANTE",
+        "CategoriaPPMS": "REFRI",
+        "ClusterDemanda": "DUMMY",
+        "UnidadeMedida": "Caixa",
+        "CXS": 90,
+        "PLT": 1,
+        "Transito": 1,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 0
+    },
+    {
         "CodigoProduto": 33641,
         "DescricaoProduto": "BALLANTINES 10 YEARS GARRAFA VIDRO 1 L",
         "FamliaEmbalagem": "GRF 1L",
@@ -5764,7 +6108,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - MATCH",
         "UnidadeMedida": "Caixa",
-        "CXS": 225,
+        "CXS": 213,
         "PLT": 1,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -5781,8 +6125,8 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 9.345,
-        "PLT": 32,
+        "CXS": 6.423,
+        "PLT": 22,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -5798,8 +6142,8 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 7.436,
-        "PLT": 26,
+        "CXS": 0,
+        "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
         "MarcMarcD1": 0,
@@ -5951,7 +6295,7 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 152,
+        "CXS": 141,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -6002,7 +6346,7 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 3,
+        "CXS": 0,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -6036,7 +6380,7 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 42,
+        "CXS": 41,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -6053,7 +6397,7 @@
         "CategoriaPPMS": "REFRI",
         "ClusterDemanda": "ESTRATEGICO",
         "UnidadeMedida": "Caixa",
-        "CXS": 1.02,
+        "CXS": 1.006,
         "PLT": 3,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -6070,7 +6414,7 @@
         "CategoriaPPMS": "Unmapped",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Unidade",
-        "CXS": 1,
+        "CXS": 0,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -6087,10 +6431,10 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 0,
+        "CXS": 181,
         "PLT": 0,
-        "Transito": 26,
-        "MarcMarcD0": 35,
+        "Transito": 0,
+        "MarcMarcD0": 0,
         "MarcMarcD1": 0,
         "MarcMarcD2": 0
     },
@@ -6138,7 +6482,7 @@
         "CategoriaPPMS": "MONDELEZ",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 10,
+        "CXS": 9,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -6206,7 +6550,7 @@
         "CategoriaPPMS": "UNMAPPED",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 77,
+        "CXS": 76,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -6223,7 +6567,7 @@
         "CategoriaPPMS": "UNMAPPED",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 0,
+        "CXS": 1,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -6257,7 +6601,7 @@
         "CategoriaPPMS": "UNMAPPED",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 1,
+        "CXS": 3,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -6333,16 +6677,16 @@
         "MarcMarcD2": 0
     },
     {
-        "CodigoProduto": 35383,
-        "DescricaoProduto": "LIPTON LIMAO LATA SLEEK 340 ML SH C/12",
-        "FamliaEmbalagem": "LT 340ML",
-        "Embalagem": "LT 340ML C/12",
-        "Categoria": "NAB",
-        "Subcategoria": "CHA",
-        "CategoriaPPMS": "CHA",
-        "ClusterDemanda": "ESTRATEGICO",
-        "UnidadeMedida": "Caixa",
-        "CXS": 280,
+        "CodigoProduto": 35331,
+        "DescricaoProduto": "BUDWEISER GFA VD 1L",
+        "FamliaEmbalagem": "GRF 1L",
+        "Embalagem": "GFA VD 1L",
+        "Categoria": "CERVEJA",
+        "Subcategoria": "CERVEJA COM ALCOOL",
+        "CategoriaPPMS": "CERVEJA",
+        "ClusterDemanda": "CORE PLUS",
+        "UnidadeMedida": "Duzia",
+        "CXS": 50,
         "PLT": 1,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -6376,7 +6720,7 @@
         "CategoriaPPMS": "UNMAPPED",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 2,
+        "CXS": 3,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -6427,7 +6771,7 @@
         "CategoriaPPMS": "UNMAPPED",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Unidade",
-        "CXS": 2,
+        "CXS": 1,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -6461,7 +6805,7 @@
         "CategoriaPPMS": "UNMAPPED",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Caixa",
-        "CXS": 2,
+        "CXS": 0,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -6478,7 +6822,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "MATCH",
         "UnidadeMedida": "Caixa",
-        "CXS": 1.044,
+        "CXS": 1.04,
         "PLT": 2,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -6495,7 +6839,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "MATCH",
         "UnidadeMedida": "Caixa",
-        "CXS": 78,
+        "CXS": 77,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -6512,7 +6856,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "MATCH",
         "UnidadeMedida": "Caixa",
-        "CXS": 288,
+        "CXS": 286,
         "PLT": 1,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -6546,7 +6890,24 @@
         "CategoriaPPMS": "Interfood",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Unidade",
-        "CXS": 1,
+        "CXS": 2,
+        "PLT": 0,
+        "Transito": 0,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 0
+    },
+    {
+        "CodigoProduto": 35995,
+        "DescricaoProduto": "SANTA HELENA VINHO BR CHARDON RES GFA VD 750 ML",
+        "FamliaEmbalagem": "GFA VD 750 ML",
+        "Embalagem": "GFA VD 750 ML",
+        "Categoria": "MKTP",
+        "Subcategoria": "WINE",
+        "CategoriaPPMS": "Interfood",
+        "ClusterDemanda": "MARKET PLACE",
+        "UnidadeMedida": "Unidade",
+        "CXS": 0,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -6563,7 +6924,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "INNO - HE",
         "UnidadeMedida": "Caixa",
-        "CXS": 378,
+        "CXS": 368,
         "PLT": 2,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -6580,7 +6941,7 @@
         "CategoriaPPMS": "CERVEJA",
         "ClusterDemanda": "CORE",
         "UnidadeMedida": "Caixa",
-        "CXS": 1.336,
+        "CXS": 1.236,
         "PLT": 4,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -6648,7 +7009,7 @@
         "CategoriaPPMS": "UNMAPPED",
         "ClusterDemanda": "MARKET PLACE",
         "UnidadeMedida": "Unidade",
-        "CXS": 0,
+        "CXS": 1,
         "PLT": 0,
         "Transito": 0,
         "MarcMarcD0": 0,
@@ -6724,6 +7085,23 @@
         "MarcMarcD2": 0
     },
     {
+        "CodigoProduto": 36566,
+        "DescricaoProduto": "GATO NEGRO VINHO TIN C SAUVIGNON GFA VD 750 ML",
+        "FamliaEmbalagem": "GFA VD 750 ML",
+        "Embalagem": "GFA VD 750 ML",
+        "Categoria": "MKTP",
+        "Subcategoria": "WINE",
+        "CategoriaPPMS": "Interfood",
+        "ClusterDemanda": "MARKET PLACE",
+        "UnidadeMedida": "Unidade",
+        "CXS": 0,
+        "PLT": 0,
+        "Transito": 0,
+        "MarcMarcD0": 0,
+        "MarcMarcD1": 0,
+        "MarcMarcD2": 0
+    },
+    {
         "CodigoProduto": 36697,
         "DescricaoProduto": "ZE DELIVERY SACOLA PLAST AMARELA 1 UN SAC 8G 37X48 SACO PL C1000",
         "FamliaEmbalagem": "SACO PLAST 8G",
@@ -6757,24 +7135,25 @@
         "MarcMarcD1": 0,
         "MarcMarcD2": 0
     }
-];
+  ];
 
-  // --- Estado ---
-  let filtroExtraCampo = null; // 'Transito' | 'MarcMarcD0' | 'MarcMarcD1' | 'MarcMarcD2' | null
-
-  // --- Utilidades ---
-  const nf = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  let filtroExtraCampo = null;
+  const nf = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  
   function paraNumero(valor) {
     if (valor === null || valor === undefined) return 0;
-    if (typeof valor === 'number') return Number.isFinite(valor) ? valor : 0;
+    if (typeof valor === 'number') {
+      if (!Number.isInteger(valor)) return Math.round(valor * 1000);
+      return valor;
+    }
     const limpo = String(valor).replace(/\./g, '').replace(',', '.').trim();
     const n = parseFloat(limpo);
-    return Number.isFinite(n) ? n : 0;
+    return isNaN(n) ? 0 : Math.round(n);
   }
+
   function formata(valor) { return nf.format(paraNumero(valor)); }
   function normalizaTexto(s) { return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); }
 
-  // --- DOM refs ---
   const $codigo = document.getElementById('codigoInput');
   const $nome = document.getElementById('nomeInput');
   const $categoria = document.getElementById('categoriaSelect');
@@ -6782,160 +7161,87 @@
   const $resumo = document.getElementById('resumo');
   const $resultado = document.getElementById('resultado');
 
-  // --- Interações ---
+  $codigo.addEventListener('input', () => {
+    const val = $codigo.value.trim();
+    if (val === "" || produtos.some(p => String(p.CodigoProduto) === val)) buscarProduto();
+  });
+
   document.getElementById('btnBuscar').addEventListener('click', buscarProduto);
   document.getElementById('btnLimpar').addEventListener('click', limparCampos);
-  $codigo.addEventListener('keydown', e => { if (e.key === 'Enter') buscarProduto(); });
-  $nome.addEventListener('keydown', e => { if (e.key === 'Enter') buscarProduto(); });
+  $nome.addEventListener('keydown', e => e.key === 'Enter' && buscarProduto());
 
-  // Toggle dos botões extra
   document.querySelectorAll('[data-extra]').forEach(btn => {
     btn.addEventListener('click', () => {
-      const campo = btn.dataset.extra;
-      // Se já está ativo, desativa; senão ativa
-      if (filtroExtraCampo === campo) {
-        filtroExtraCampo = null;
-        btn.classList.remove('ativo');
-      } else {
-        filtroExtraCampo = campo;
-        document.querySelectorAll('[data-extra]').forEach(b => b.classList.remove('ativo'));
-        btn.classList.add('ativo');
-      }
+      filtroExtraCampo = (filtroExtraCampo === btn.dataset.extra) ? null : btn.dataset.extra;
+      document.querySelectorAll('[data-extra]').forEach(b => b.classList.toggle('ativo', b.dataset.extra === filtroExtraCampo));
       buscarProduto();
     });
   });
 
-  function mostrarLoading() {
-    $resultado.innerHTML = `
-      <div style="display:flex;justify-content:center;align-items:center;height:100px;">
-        <div class="spinner" aria-label="Carregando"></div>
+  function gerarCardHTML(p) {
+    const cxs = paraNumero(p.CXS);
+    const plt = paraNumero(p.PLT);
+    const tra = paraNumero(p.Transito);
+    const getStatus = (v, type) => {
+      if (type === 'CXS') return v === 0 ? 'alert' : 'ok';
+      if (type === 'PLT') return v > 10 ? 'ok' : 'info';
+      if (type === 'TRA') return v > 0 ? 'info' : '';
+      if (type === 'DIA') return v > 0 ? 'ok' : '';
+      return '';
+    };
+
+    return `
+      <div class="card">
+        <div class="card-header">
+            <i data-lucide="package"></i>
+            <div>${p.CodigoProduto} • ${p.DescricaoProduto}</div>
+        </div>
+        <div class="metrics">
+          <div class="metric ${getStatus(plt, 'PLT')}"><span>${formata(p.PLT)}</span> PLT</div>
+          <div class="metric ${getStatus(cxs, 'CXS')}"><span>${formata(p.CXS)}</span> CXS</div>
+          <div class="metric ${getStatus(tra, 'TRA')}"><span>${formata(p.Transito)}</span> TRA</div>
+          <div class="metric ${getStatus(p.MarcMarcD0, 'DIA')}"><span>${formata(p.MarcMarcD0)}</span> D0</div>
+          <div class="metric ${getStatus(p.MarcMarcD1, 'DIA')}"><span>${formata(p.MarcMarcD1)}</span> D1</div>
+          <div class="metric ${getStatus(p.MarcMarcD2, 'DIA')}"><span>${formata(p.MarcMarcD2)}</span> D2</div>
+        </div>
+        <div class="details">
+          <div class="tag">${p.FamliaEmbalagem ?? '—'}</div>
+          <div class="tag">${p.Categoria ?? '—'}</div>
+          <div class="tag">${p.ClusterDemanda ?? '—'}</div>
+        </div>
       </div>
     `;
   }
 
-  function atualizarResumo(qtd) {
-    const filtros = [];
-    if ($codigo.value.trim()) filtros.push(`Código: ${$codigo.value.trim()}`);
-    if ($nome.value.trim()) filtros.push(`Nome: "${$nome.value.trim()}"`);
-    if ($categoria.value) filtros.push(`Categoria: ${$categoria.value}`);
-    if ($cluster.value) filtros.push(`Cluster: ${$cluster.value}`);
-    if (filtroExtraCampo) filtros.push(`Extra: ${filtroExtraCampo}`);
-    $resumo.textContent = `${qtd} item(ns) encontrado(s)` + (filtros.length ? ` • Filtros: ${filtros.join(' | ')}` : '');
-  }
-
   function buscarProduto() {
-    mostrarLoading();
+    $resultado.innerHTML = '<div style="grid-column:1/-1; display:flex; justify-content:center; padding:20px;"><div class="spinner"></div></div>';
     setTimeout(() => {
-      const codigo = $codigo.value.trim();
-      const nome = normalizaTexto($nome.value.trim());
-      const categoria = $categoria.value;
-      const cluster = $cluster.value;
+      const cod = $codigo.value.trim();
+      const nom = normalizaTexto($nome.value.trim());
+      const cat = $categoria.value;
+      const clu = $cluster.value;
 
-      const resultados = produtos.filter(p => {
-        const condCodigo = !codigo || String(p.CodigoProduto).includes(codigo);
-        const condNome = !nome || normalizaTexto(p.DescricaoProduto).includes(nome);
-        const condCategoria = !categoria || p.Categoria === categoria;
-        const condCluster = !cluster || p.ClusterDemanda === cluster;
-        const condExtra = !filtroExtraCampo || paraNumero(p[filtroExtraCampo]) > 0;
-        return condCodigo && condNome && condCategoria && condCluster && condExtra;
+      const res = produtos.filter(p => {
+        const matchCodigo = !cod || String(p.CodigoProduto) === cod;
+        const matchNome = !nom || normalizaTexto(p.DescricaoProduto).includes(nom);
+        const matchCat = !cat || p.Categoria === cat;
+        const matchClu = !clu || p.ClusterDemanda === clu;
+        const matchExtra = !filtroExtraCampo || paraNumero(p[filtroExtraCampo]) > 0;
+        return matchCodigo && matchNome && matchCat && matchClu && matchExtra;
       });
 
-      exibirResultados(resultados);
-      atualizarResumo(resultados.length);
-    }, 300);
-  }
-
-  function exibirResultados(resultados) {
-    $resultado.innerHTML = '';
-    if (!resultados.length) {
-      const p = document.createElement('p');
-      p.style.color = '#ff4d4d';
-      p.textContent = 'Nenhum produto encontrado.';
-      $resultado.appendChild(p);
-      return;
-    }
-
-    const frag = document.createDocumentFragment();
-
-    resultados.forEach(produto => {
-      const card = document.createElement('div');
-      card.className = 'card';
-
-      const cxsVal = paraNumero(produto.CXS);
-      const pltVal = paraNumero(produto.PLT);
-      const transVal = paraNumero(produto.Transito);
-
-      const cxsClass = cxsVal === 0 ? 'alert' : 'ok';
-      const pltClass = pltVal > 10 ? 'ok' : 'info';
-      const transClass = transVal > 0 ? 'info' : 'muted';
-
-      // Header
-      const header = document.createElement('div');
-      header.className = 'card-header';
-      header.textContent = `${produto.CodigoProduto} - ${produto.DescricaoProduto}`;
-
-      // Métricas
-      const metrics = document.createElement('div');
-      metrics.className = 'metrics';
-
-      metrics.appendChild(metrica(formata(produto.CXS), '📦 CXS', cxsClass));
-      metrics.appendChild(metrica(formata(produto.PLT), '🛒 PLT', pltClass));
-      metrics.appendChild(metrica(formata(produto.Transito), '🚚 Trânsito', transClass));
-      metrics.appendChild(metrica(formata(produto.MarcMarcD0), '⏱️ D0', ''));
-      metrics.appendChild(metrica(formata(produto.MarcMarcD1), '📦 D1', ''));
-      metrics.appendChild(metrica(formata(produto.MarcMarcD2), '📦 D2', ''));
-
-      // Detalhes
-      const details = document.createElement('div');
-      details.className = 'details';
-      details.appendChild(tag(`Família: ${produto.FamiliaEmbalagem ?? '—'}`));
-      details.appendChild(tag(`Embalagem: ${produto.Embalagem ?? '—'}`));
-      details.appendChild(tag(`Categoria: ${produto.Categoria ?? '—'}`));
-      details.appendChild(tag(`Subcategoria: ${produto.Subcategoria ?? '—'}`));
-      details.appendChild(tag(`CategoriaPPMS: ${produto.CategoriaPPMS ?? '—'}`));
-      details.appendChild(tag(`ClusterDemanda: ${produto.ClusterDemanda ?? '—'}`));
-      details.appendChild(tag(`Unidade: ${produto.UnidadeMedida ?? '—'}`));
-
-      card.appendChild(header);
-      card.appendChild(metrics);
-      card.appendChild(details);
-      frag.appendChild(card);
-    });
-
-    $resultado.appendChild(frag);
-
-    function metrica(valor, label, extraClass) {
-      const d = document.createElement('div');
-      d.className = `metric ${extraClass || ''}`.trim();
-      const span = document.createElement('span');
-      span.textContent = valor;
-      d.appendChild(span);
-      d.appendChild(document.createTextNode(` ${label}`));
-      return d;
-    }
-    function tag(texto) {
-      const d = document.createElement('div');
-      d.className = 'tag';
-      d.textContent = texto;
-      return d;
-    }
+      $resultado.innerHTML = res.length ? res.map(gerarCardHTML).join('') : '<p style="grid-column:1/-1; text-align:center; color:var(--alert); font-size: 0.8rem;">Nenhum item encontrado.</p>';
+      lucide.createIcons();
+      $resumo.textContent = `${res.length} item(ns) encontrado(s)`;
+    }, 150);
   }
 
   function limparCampos() {
-    $codigo.value = '';
-    $nome.value = '';
-    $categoria.value = '';
-    $cluster.value = '';
+    $codigo.value = ''; $nome.value = ''; $categoria.value = ''; $cluster.value = '';
     filtroExtraCampo = null;
     document.querySelectorAll('[data-extra]').forEach(b => b.classList.remove('ativo'));
-    $resultado.innerHTML = '';
-    $resumo.textContent = '';
-    $codigo.focus();
+    $resultado.innerHTML = ''; $resumo.textContent = ''; $codigo.focus();
   }
-
-  // Busca inicial opcional
-  // buscarProduto();
 </script>
-
 </body>
 </html>
