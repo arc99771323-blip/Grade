@@ -113,7 +113,7 @@
 <body>
 
 <h2>Busca de Produtos</h2>
-<h3>Atualizado • 20/04/2026 09:10</h3>
+<h3>Atualizado • 20/04/2026 09:10 • 997713223 </h3>
 
 <div class="filtros">
   <div class="linha">
@@ -7384,12 +7384,12 @@
             <div>${p.CodigoProduto} • ${p.DescricaoProduto}</div>
         </div>
         <div class="metrics">
-          <div class="metric ${getStatus(plt, 'PLT')}"><span>${formata(p.PLT)}</span> PLT</div>
-          <div class="metric ${getStatus(cxs, 'CXS')}"><span>${formata(p.CXS)}</span> CXS</div>
-          <div class="metric ${getStatus(tra, 'TRA')}"><span>${formata(p.Transito)}</span> TRA</div>
-          <div class="metric ${getStatus(p.MarcMarcD0, 'DIA')}"><span>${formata(p.MarcMarcD0)}</span> D0</div>
-          <div class="metric ${getStatus(p.MarcMarcD1, 'DIA')}"><span>${formata(p.MarcMarcD1)}</span> D1</div>
-          <div class="metric ${getStatus(p.MarcMarcD2, 'DIA')}"><span>${formata(p.MarcMarcD2)}</span> D2</div>
+          <div class="metric ${getStatus(plt, 'PLT')}"><span>${formata(p.PLT)}</span> Paletes</div>
+          <div class="metric ${getStatus(cxs, 'CXS')}"><span>${formata(p.CXS)}</span> Caixas</div>
+          <div class="metric ${getStatus(tra, 'TRA')}"><span>${formata(p.Transito)}</span> Em trânsito</div>
+          <div class="metric ${getStatus(p.MarcMarcD0, 'DIA')}"><span>${formata(p.MarcMarcD0)}</span> Marc. D0</div>
+          <div class="metric ${getStatus(p.MarcMarcD1, 'DIA')}"><span>${formata(p.MarcMarcD1)}</span> Marc. D1</div>
+          <div class="metric ${getStatus(p.MarcMarcD2, 'DIA')}"><span>${formata(p.MarcMarcD2)}</span> Marc. D2</div>
         </div>
         <div class="details">
           <div class="tag">${p.FamliaEmbalagem ?? '—'}</div>
